@@ -1,7 +1,11 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "exclude": [
+    "dist",
+    "tina/__generated__",
+    "public/admin"
+  ],
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",

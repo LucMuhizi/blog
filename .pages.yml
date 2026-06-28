@@ -114,11 +114,6 @@ content:
     type: collection
     path: src/content/posts/en
     extension: mdx
-    filename:
-      # Generates e.g. 2026-06-27-policy-brief-on-education.mdx
-      prefix: "{year}-{month}-{day}-"
-      field: title
-      slugify: true
     view:
       fields: [title, category, pubDate, draft, featured]
       sort:
@@ -263,9 +258,25 @@ content:
             - label: English
               value: en
 
-      # SEO overrides
-      - name: seo
-        component: seo
+      # SEO overrides (top-level; mirrors the shape of the singletons in
+      # `pages:` and the `post` schema in src/content.config.ts).
+      - name: seoTitle
+        label: SEO title
+        type: string
+        description: Custom <title> tag. Max 60 characters.
+        options:
+          maxlength: 60
+      - name: seoDescription
+        label: SEO description
+        type: text
+        description: Custom meta description. Max 160 characters.
+        options:
+          maxlength: 160
+      - name: canonical
+        label: Canonical URL
+        type: string
+        description: Set only if this content was originally published elsewhere (e.g. Medium).
+        pattern: "^https?://.+"
 
       # Body — maps to MDX content below frontmatter
       - name: body
@@ -286,10 +297,6 @@ content:
     type: collection
     path: src/content/projects/en
     extension: mdx
-    filename:
-      prefix: "{year}-"
-      field: title
-      slugify: true
     view:
       fields: [title, status, pubDate]
       sort:
@@ -394,8 +401,23 @@ content:
             - label: English
               value: en
 
-      - name: seo
-        component: seo
+      - name: seoTitle
+        label: SEO title
+        type: string
+        description: Custom <title> tag. Max 60 characters.
+        options:
+          maxlength: 60
+      - name: seoDescription
+        label: SEO description
+        type: text
+        description: Custom meta description. Max 160 characters.
+        options:
+          maxlength: 160
+      - name: canonical
+        label: Canonical URL
+        type: string
+        description: Set only if this content was originally published elsewhere (e.g. Medium).
+        pattern: "^https?://.+"
 
       - name: body
         label: Project details
@@ -414,10 +436,6 @@ content:
     type: collection
     path: src/content/speaking/en
     extension: mdx
-    filename:
-      prefix: "{year}-{month}-{day}-"
-      field: title
-      slugify: true
     view:
       fields: [title, eventType, eventDate]
       sort:
@@ -536,8 +554,23 @@ content:
             - label: English
               value: en
 
-      - name: seo
-        component: seo
+      - name: seoTitle
+        label: SEO title
+        type: string
+        description: Custom <title> tag. Max 60 characters.
+        options:
+          maxlength: 60
+      - name: seoDescription
+        label: SEO description
+        type: text
+        description: Custom meta description. Max 160 characters.
+        options:
+          maxlength: 160
+      - name: canonical
+        label: Canonical URL
+        type: string
+        description: Set only if this content was originally published elsewhere (e.g. Medium).
+        pattern: "^https?://.+"
 
       - name: body
         label: Notes / summary

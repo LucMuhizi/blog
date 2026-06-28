@@ -173,8 +173,16 @@ preserved through locale metadata.
 
 ## Write Content
 
-Content lives in `src/content`, nested under `en/` while the platform stays
-single-locale English:
+The non-technical author writes posts in **[TinaCMS](https://tina.io)**
+at the in-site `/admin/` route. Sign-in is by email through Tina Cloud
+— no GitHub account required. On save, Tina commits an MDX file to
+this repository through the Tina GitHub App, and Cloudflare Pages
+rebuilds the site. The schema lives in `tina/config.ts`; setup
+instructions and the editor day-to-day flow are in
+[`tina/README.md`](tina/README.md).
+
+The on-disk content lives in `src/content`, nested under `en/` while
+the platform stays single-locale English:
 
 ```text
 src/content/

@@ -68,7 +68,7 @@ const post = defineCollection({
       pdfDownload: z.string().regex(/^https?:\/\/.+/i).optional(),
       readingTime: z.number().int().positive().max(120).optional(),
       viewCount: z.number().int().nonnegative().optional(),
-      draft: z.boolean().default(false),
+      draft: z.boolean().default(true),
       featured: z.boolean().default(false),
       seo: seoPayloadOptional,
     })

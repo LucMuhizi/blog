@@ -19,6 +19,7 @@ const sitemapExcludedPathPatterns = [
   /\/404\/?$/,
   /\/search\/?$/,
   /\/editor\/?$/,
+  /\/admin\/?$/,
   /\/rss\.xml\/?$/,
   // Paginated archive duplicates of /posts/ and /posts/category/<slug>/
   /^\/posts\/(?:category\/[^/]+\/)?page\/\d+\/?$/,

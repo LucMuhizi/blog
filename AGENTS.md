@@ -170,14 +170,20 @@ Use pnpm for Node.js work. Do not add npm, yarn, or bun lockfiles.
 
 ## Content Rules
 
+- Posts are edited through **TinaCMS** (see `tina/config.ts`). The
+  non-technical author signs in at https://app.tina.io with an email;
+  Tina commits MDX files to this repository through the Tina GitHub
+  App, and Cloudflare Pages rebuilds on each save. See `tina/README.md`
+  for the one-time setup, the editor day-to-day flow, and how to add
+  more collections.
 - Posts live in `src/content/posts/en/`.
 - Pages live in `src/content/pages/en/`.
 - Authors live in `src/content/authors/en/`.
 - The site exposes English content only. The `en/` subdirectory is an
   artifact of the prior multi-locale setup; the schema no longer enforces a
-  `locale` field, but the on-disk layout (and the Pages CMS configuration in
-  `.pages.yml`) continues to nest content under `en/`. New content must
-  follow the same nested layout for Pages CMS round-trips to keep working.
+  `locale` field, but the on-disk layout (and the TinaCMS schema in
+  `tina/config.ts`) continues to nest content under `en/`. New content must
+  follow the same nested layout for the editor's glob loader to find it.
 - Translating content into other languages is out of scope; the platform
   ships English only.
 - Post frontmatter uses `title`, `description`, `category`, `tags`,

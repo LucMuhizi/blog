@@ -114,6 +114,7 @@ content:
     type: collection
     path: src/content/posts/en
     extension: mdx
+    filename: "{year}-{month}-{day}-{fields.title}"
     view:
       fields: [title, category, pubDate, draft, featured]
       sort:
@@ -297,6 +298,7 @@ content:
     type: collection
     path: src/content/projects/en
     extension: mdx
+    filename: "{year}-{fields.title}"
     view:
       fields: [title, status, pubDate]
       sort:
@@ -436,6 +438,7 @@ content:
     type: collection
     path: src/content/speaking/en
     extension: mdx
+    filename: "{year}-{month}-{day}-{fields.title}"
     view:
       fields: [title, eventType, eventDate]
       sort:

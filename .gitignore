@@ -34,3 +34,6 @@ pnpm-debug.log*
 scripts/.migration/
 # Brand-asset scratch data from scripts/prepare-nt-assets.mjs
 scripts/.nt-assets/
+
+# Wrangler dry-run build output (do not commit)
+.wrangler-dist/

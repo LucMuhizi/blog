@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "blog",
+  "compatibility_date": "2026-05-11",
+  "main": "src/x402/cloudflare-worker.ts",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/*"],
+    "html_handling": "force-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "vars": {
+    "X402_ENABLED": "false",
+    "X402_NETWORK": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+    "X402_PRICE": "$0.18",
+    "X402_FACILITATOR_URL": "https://x402.org/facilitator",
+    "X402_BOT_ONLY": "true",
+    "X402_BOT_SCORE_THRESHOLD": "30",
+    "X402_PROTECTED_PATTERNS": "/api,/api/,/api/v1,/api/v1/,/en/posts/,/zh/posts/,/fr/posts/,/es/posts/,/ru/posts/,/ja/posts/,/ko/posts/,/pt/posts/,/de/posts/,/id/posts/,/ar/posts/"
+  },
+  "observability": {
+    "enabled": false
+  }
+}

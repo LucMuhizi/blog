@@ -1,0 +1,90 @@
+---
+import { getEntry, render } from "astro:content"
+import Layout from "@/layouts/main.astro"
+import ProseContent from "@/components/layout/ProseContent.astro"
+import { SITE_CONFIG } from "@/config/site"
+
+const entry = await getEntry("page", "en/contact")
+if (!entry) {
+  throw new Error("Missing page entry: en/contact")
+}
+const { Content } = await render(entry)
+
+// Silently fall back to site config when the contact entry omits direct
+// email/phone/address fields. Keeps the page useful even if the markdown
+// author forgets to repeat contact details.
+const email = SITE_CONFIG.contact?.email ?? ""
+const phone = SITE_CONFIG.contact?.phone ?? ""
+const address = SITE_CONFIG.contact?.address ?? ""
+---
+
+<Layout
+  path="/contact/"
+  title={entry.data.title}
+  description={entry.data.description}
+  noindex={entry.data.noindex}
+>
+  <article
+    class="mx-auto max-w-3xl px-4 py-12 sm:px-6"
+    data-pagefind-body
+  >
+    <header class="mb-10">
+      <h1
+        class="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl"
+      >
+        {entry.data.title}
+      </h1>
+      {entry.data.description && (
+        <p class="mt-3 max-w-2xl text-base text-muted-foreground sm:text-lg">
+          {entry.data.description}
+        </p>
+      )}
+    </header>
+
+    {(email || phone || address) && (
+      <dl
+        class="mb-10 grid gap-4 rounded-2xl border border-border bg-card p-6 text-sm sm:grid-cols-3"
+      >
+        {email && (
+          <div>
+            <dt class="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              Email
+            </dt>
+            <dd class="mt-1">
+              <a class="underline-offset-4 hover:underline" href={`mailto:${email}`}>
+                {email}
+              </a>
+            </dd>
+          </div>
+        )}
+        {phone && (
+          <div>
+            <dt class="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              Phone
+            </dt>
+            <dd class="mt-1">
+              <a
+                class="underline-offset-4 hover:underline"
+                href={`tel:${phone.replace(/[^+\d]/g, "")}`}
+              >
+                {phone}
+              </a>
+            </dd>
+          </div>
+        )}
+        {address && (
+          <div>
+            <dt class="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+              Location
+            </dt>
+            <dd class="mt-1">{address}</dd>
+          </div>
+        )}
+      </dl>
+    )}
+
+    <ProseContent class="article-prose max-w-none">
+      <Content />
+    </ProseContent>
+  </article>
+</Layout>

@@ -1,0 +1,120 @@
+---
+import Icon from "@/components/ui/Icon.astro"
+import OptimizedPicture from "@/components/features/OptimizedPicture.astro"
+import DomainBadge from "@/components/ui/DomainBadge.astro"
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  author: CollectionEntry<"author">
+  ctaHref?: string
+  ctaLabel?: string
+  variant?: "default" | "compact"
+}
+
+const { author, ctaHref = "/about/", ctaLabel = "Read about", variant = "default" } =
+  Astro.props
+
+const data = author.data
+const socials = (data.socials ?? []).slice(0, 4)
+const organisations = (data.organisations ?? []).slice(0, 6)
+const avatarWidth = data.avatarWidth ?? 96
+const avatarHeight = data.avatarHeight ?? 96
+const isCompact = variant === "compact"
+---
+
+<article
+  class:list={[
+    "profile-card flex flex-col gap-5 p-6 sm:gap-6 sm:p-8",
+    isCompact ? "sm:p-6" : "",
+  ]}
+>
+  <div class="flex items-center gap-4">
+    {
+      data.avatar ? (
+        <OptimizedPicture
+          src={data.avatar}
+          alt={`Portrait of ${data.name}`}
+          width={avatarWidth}
+          height={avatarHeight}
+          variant="avatar"
+          class="size-20 rounded-full object-cover"
+        />
+      ) : (
+        <div
+          aria-hidden="true"
+          class="flex size-20 items-center justify-center rounded-full border border-current/15 font-serif text-2xl"
+        >
+          {data.name.slice(0, 1)}
+        </div>
+      )
+    }
+    <div class="flex flex-col">
+      <p class="eyebrow">About the author</p>
+      <h2 class="profile-card__name mt-1 text-balance text-2xl leading-tight sm:text-3xl">
+        {data.name}
+      </h2>
+      {data.role ? (
+        <p class="mt-0.5 text-sm font-medium sm:text-base">{data.role}</p>
+      ) : null}
+    </div>
+  </div>
+
+  {data.tagline ? (
+    <p class="font-serif text-base leading-7 sm:text-lg">{data.tagline}</p>
+  ) : null}
+  {data.bio ? (
+    <p class="font-serif text-sm leading-7 opacity-90 sm:text-base">{data.bio}</p>
+  ) : null}
+
+  {
+    organisations.length > 0 ? (
+      <div class="flex flex-col gap-2 border-t border-current/15 pt-4">
+        <p class="eyebrow">Affiliations & convening</p>
+        <ul class="flex flex-wrap items-center gap-2 pt-1">
+          {organisations.map((org) => (
+            <li>
+              {org.url ? (
+                <DomainBadge domain="purple" size="sm" href={org.url} label={org.name} />
+              ) : (
+                <DomainBadge domain="purple" size="sm" label={org.name} />
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : null
+  }
+
+  {
+    socials.length > 0 ? (
+      <ul class="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-sm">
+        {socials.map((social) => (
+          <li>
+            <a
+              class="inline-flex items-center gap-1.5 underline-offset-4 transition-colors hover:underline"
+              href={social.url}
+              rel={social.url.startsWith("/") ? undefined : "me noopener"}
+            >
+              <Icon
+                name={
+                  social.url.startsWith("mailto:")
+                    ? "mail"
+                    : social.url.includes("x.com") || social.url.includes("twitter")
+                      ? "at-sign"
+                      : "arrow-up-right"
+                }
+                class="size-3.5"
+                dataIcon="inline-start"
+              />
+              <span>{social.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : null
+  }
+
+  <div class="mt-1">
+    <a class="btn-secondary" href={ctaHref}>{ctaLabel}</a>
+  </div>
+</article>

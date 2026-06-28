@@ -1,0 +1,62 @@
+---
+import Icon from "@/components/ui/Icon.astro"
+import DomainBadge from "@/components/ui/DomainBadge.astro"
+
+type Domain = "amber" | "purple" | "teal" | "rose"
+const DOMAIN_ROTATION: ReadonlyArray<Domain> = ["amber", "purple", "teal", "rose"]
+
+interface Props {
+  title: string
+  summary: string
+  href: string
+  detail?: string
+  index?: number
+  domainIndex?: number
+  class?: string
+}
+
+const {
+  title,
+  summary,
+  href,
+  detail,
+  index,
+  domainIndex,
+  class: className = "",
+} = Astro.props
+
+const resolvedIndex = typeof domainIndex === "number"
+  ? domainIndex
+  : typeof index === "number"
+    ? index
+    : -1
+const domain: Domain | undefined =
+  resolvedIndex >= 0 ? DOMAIN_ROTATION[resolvedIndex % DOMAIN_ROTATION.length] : undefined
+
+const ariaLabel = detail ? `${title} — ${detail}` : title
+const haloStyle = domain ? `--halo-color: var(--accent-${domain});` : undefined
+---
+
+<article class:list={["service-card halo-card flex flex-col gap-3 px-5 py-6 sm:px-6 sm:py-7", className]} style={haloStyle}>
+  <div
+    class="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.18em]"
+  >
+    {domain ? <DomainBadge domain={domain} size="sm" /> : <span class="section-rule" aria-hidden="true"></span>}
+    {
+      typeof index === "number" && domain ? (
+        <span class="opacity-80">0{index + 1}</span>
+      ) : null
+    }
+    {detail ? <span class="opacity-80">{detail}</span> : null}
+  </div>
+  <h3 class="service-card__title text-balance text-xl leading-tight sm:text-2xl">
+    <a href={href} aria-label={ariaLabel}>{title}</a>
+  </h3>
+  <p class="service-card__summary text-base leading-7">{summary}</p>
+  <div class="mt-2 flex items-center gap-2 text-sm">
+    <a class="inline-flex items-center gap-1 underline-offset-4 hover:underline" href={href}>
+      <span>Learn more</span>
+      <Icon name="arrow-right" class="size-4" dataIcon="inline-start" />
+    </a>
+  </div>
+</article>

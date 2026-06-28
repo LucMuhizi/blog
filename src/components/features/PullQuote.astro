@@ -1,0 +1,22 @@
+---
+interface Props {
+  attribution?: string
+  cite?: string
+}
+
+const { attribution, cite } = Astro.props
+---
+
+<figure class="pull-quote">
+  <blockquote>
+    <slot />
+  </blockquote>
+  {
+    attribution ? (
+      <cite>
+        {cite ? <span>&mdash; {cite}, </span> : null}
+        {attribution}
+      </cite>
+    ) : null
+  }
+</figure>

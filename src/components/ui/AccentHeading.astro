@@ -1,0 +1,64 @@
+---
+interface Props {
+  level?: 1 | 2 | 3
+  text: string
+  accentWords?: string[]
+  class?: string
+  id?: string
+}
+
+const {
+  level = 2,
+  text,
+  accentWords = [],
+  class: className = "",
+  id,
+} = Astro.props
+
+const Tag = `h${level}` as "h1" | "h2" | "h3"
+
+// Build a tokenised render that scoops up span-wrapped italic-gold words.
+// We walk the source, splitting on whitespace and capitalising matched
+// key words with `matchLower = wordText.toLowerCase() === key.toLowerCase()`.
+const tokens: Array<{ type: "word" | "space"; value: string; accent?: boolean }> = []
+const regex = /(\s+)/g
+let lastIndex = 0
+let match: RegExpExecArray | null
+while ((match = regex.exec(text)) !== null) {
+  if (match.index > lastIndex) {
+    tokens.push({ type: "word", value: text.slice(lastIndex, match.index) })
+  }
+  tokens.push({ type: "space", value: match[0] })
+  lastIndex = regex.lastIndex
+}
+if (lastIndex < text.length) {
+  tokens.push({ type: "word", value: text.slice(lastIndex) })
+}
+
+const matched = new Set<string>()
+for (const [idx, token] of tokens.entries()) {
+  if (token.type !== "word") continue
+  const cleaned = token.value.replace(/[^\p{L}\p{N}'-]+/gu, "")
+  if (!cleaned) continue
+  const isAccent = accentWords.some((key) => {
+    if (matched.has(key)) return false
+    return cleaned.toLowerCase() === key.toLowerCase()
+  })
+  if (isAccent) {
+    tokens[idx] = { ...token, accent: true }
+    matched.add(cleaned.toLowerCase())
+  }
+}
+---
+
+<Tag id={id} class={className}>
+  {
+    tokens.map((token) => {
+      if (token.type === "space") return token.value
+      if (token.accent) {
+        return <em class="accent-italic">{token.value}</em>
+      }
+      return token.value
+    })
+  }
+</Tag>

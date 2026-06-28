@@ -1,0 +1,31 @@
+---
+import PostArchiveBody from "@/components/lists/PostArchiveBody.astro"
+import { getPostsByCategory } from "@/utils/posts"
+import { getCategory, getPrimaryCategories } from "@/config/taxonomy"
+
+export async function getStaticPaths() {
+  return getPrimaryCategories().map((category) => ({
+    params: { category: category.slug },
+    props: { category },
+  }))
+}
+
+const { category } = Astro.props
+const posts = await getPostsByCategory(category.slug)
+const title = `${category.labelByLocale.en} Essays`
+const subtitle = posts.length === 0
+  ? category.descriptionByLocale.en
+  : `${posts.length} ${posts.length === 1 ? "essay" : "essays"} · ${category.descriptionByLocale.en}`
+const eyebrow = `Archive · ${category.labelByLocale.en}`
+---
+
+<PostArchiveBody
+  posts={posts}
+  currentPage={1}
+  pageBasePath={`/posts/category/${category.slug}/`}
+  title={title}
+  subtitle={subtitle}
+  pageHeading={category.labelByLocale.en}
+  eyebrow={eyebrow}
+  currentCategory={category.slug}
+/>

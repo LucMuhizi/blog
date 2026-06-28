@@ -1,0 +1,181 @@
+---
+import Icon from "@/components/ui/Icon.astro"
+import { SITE_CONFIG } from "@/config/site"
+import { localePath } from "@/utils/routes"
+import { t } from "@/utils/translations"
+
+const locale = "en"
+
+const moreLinks: { href: string; labelKey: string }[] = [
+  { href: "/values/", labelKey: "pages.values.title" },
+  { href: "/contact/", labelKey: "pages.contact.title" },
+  { href: "/services/", labelKey: "pages.services.title" },
+  { href: "/annotations/", labelKey: "pages.annotations.title" },
+]
+---
+
+<div class="lg:hidden" data-mobile-nav>
+  <button
+    type="button"
+    class="inline-flex size-9 items-center justify-center rounded-md transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+    aria-label="Menu"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    data-mobile-nav-trigger
+  >
+    <Icon name="menu" class="size-5" dataIcon="inline-start" />
+  </button>
+  <div
+    class="fixed inset-0 z-40 bg-black/35 backdrop-blur-sm"
+    hidden
+    data-mobile-nav-overlay
+  >
+  </div>
+  <aside
+    class="mobile-nav-glass fixed top-0 right-0 z-50 flex h-dvh w-full max-w-sm translate-x-full flex-col transition-transform duration-200"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="mobile-nav-title"
+    hidden
+    data-mobile-nav-panel
+  >
+    <div class="flex items-center justify-between gap-4 px-5 py-4 border-b border-current/15">
+      <p id="mobile-nav-title" class="font-serif text-base font-semibold">
+        {SITE_CONFIG.name}
+      </p>
+      <button
+        type="button"
+        class="inline-flex size-9 items-center justify-center rounded-md transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        aria-label="Close menu"
+        data-mobile-nav-close
+      >
+        <Icon name="x" class="size-4" />
+      </button>
+    </div>
+    <nav
+      class="flex flex-col gap-1 overflow-y-auto px-5 py-4"
+      aria-label="Mobile navigation"
+    >
+      <a class="nav-link rounded-md px-3 py-2.5" href={localePath("/")}>
+        {t(locale, "pages.home.title")}
+      </a>
+      <a class="nav-link rounded-md px-3 py-2.5" href={localePath("/about/")}>
+        {t(locale, "pages.about.title")}
+      </a>
+      <a class="nav-link rounded-md px-3 py-2.5" href={localePath("/posts/")}>
+        {t(locale, "navigation.musings")}
+      </a>
+      <details class="group rounded-md">
+        <summary
+          class="flex min-h-10 cursor-pointer list-none items-center justify-between rounded-md px-3 py-2 text-sm font-medium hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          <span>{t(locale, "navigation.more")}</span>
+          <Icon
+            name="chevron-down"
+            class="size-4 opacity-70 transition-transform group-open:rotate-180"
+          />
+        </summary>
+        <div class="mt-1 flex flex-col gap-1 ps-3">
+          {moreLinks.map((item) => (
+            <a
+              class="rounded-sm px-3 py-2 text-sm opacity-80 hover:bg-muted hover:opacity-100"
+              href={localePath(item.href)}
+            >
+              {t(locale, item.labelKey)}
+            </a>
+          ))}
+        </div>
+      </details>
+      <a class="nav-link rounded-md px-3 py-2.5" href={localePath("/search/")}>
+        {t(locale, "search.title")}
+      </a>
+    </nav>
+  </aside>
+</div>
+
+<script is:inline>
+  ;(() => {
+    window.__mobileNavCleanup?.()
+
+    const getParts = (root) => ({
+      trigger: root.querySelector("[data-mobile-nav-trigger]"),
+      overlay: root.querySelector("[data-mobile-nav-overlay]"),
+      panel: root.querySelector("[data-mobile-nav-panel]"),
+    })
+
+    const openNav = (root) => {
+      const { trigger, overlay, panel } = getParts(root)
+      if (
+        !(trigger instanceof HTMLElement) ||
+        !(overlay instanceof HTMLElement) ||
+        !(panel instanceof HTMLElement)
+      )
+        return
+      overlay.hidden = false
+      panel.hidden = false
+      requestAnimationFrame(() => panel.classList.remove("translate-x-full"))
+      trigger.setAttribute("aria-expanded", "true")
+      panel.querySelector("a, button, summary")?.focus()
+    }
+
+    const closeNav = (root, restoreFocus = true) => {
+      const { trigger, overlay, panel } = getParts(root)
+      if (
+        !(trigger instanceof HTMLElement) ||
+        !(overlay instanceof HTMLElement) ||
+        !(panel instanceof HTMLElement)
+      )
+        return
+      panel.classList.add("translate-x-full")
+      trigger.setAttribute("aria-expanded", "false")
+      window.setTimeout(() => {
+        overlay.hidden = true
+        panel.hidden = true
+      }, 200)
+      if (restoreFocus) trigger.focus()
+    }
+
+    const handleClick = (event) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+
+      const trigger = target.closest("[data-mobile-nav-trigger]")
+      if (trigger instanceof HTMLElement) {
+        const root = trigger.closest("[data-mobile-nav]")
+        if (root instanceof HTMLElement) openNav(root)
+        return
+      }
+
+      const closeTarget = target.closest(
+        "[data-mobile-nav-close], [data-mobile-nav-overlay]"
+      )
+      if (closeTarget instanceof HTMLElement) {
+        const root = closeTarget.closest("[data-mobile-nav]")
+        if (root instanceof HTMLElement) closeNav(root)
+      }
+    }
+
+    const handleKeydown = (event) => {
+      if (event.key !== "Escape") return
+      const panel = document.querySelector(
+        "[data-mobile-nav-panel]:not([hidden])"
+      )
+      const root = panel?.closest("[data-mobile-nav]")
+      if (root instanceof HTMLElement) closeNav(root)
+    }
+
+    const handleBeforeSwap = () => {
+      document.querySelectorAll("[data-mobile-nav]").forEach((root) => {
+        if (root instanceof HTMLElement) closeNav(root, false)
+      })
+    }
+    document.addEventListener("click", handleClick)
+    document.addEventListener("keydown", handleKeydown)
+    document.addEventListener("astro:before-swap", handleBeforeSwap)
+    window.__mobileNavCleanup = () => {
+      document.removeEventListener("click", handleClick)
+      document.removeEventListener("keydown", handleKeydown)
+      document.removeEventListener("astro:before-swap", handleBeforeSwap)
+    }
+  })()
+</script>

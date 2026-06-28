@@ -1,0 +1,146 @@
+---
+import Layout from "@/layouts/main.astro"
+import PostGrid from "@/components/lists/PostGrid.astro"
+import CategoryChips from "@/components/lists/CategoryChips.astro"
+import NewsletterStrip from "@/components/ui/NewsletterStrip.astro"
+import AccentHeading from "@/components/ui/AccentHeading.astro"
+import Icon from "@/components/ui/Icon.astro"
+import Pagination from "@/components/navigation/Pagination.astro"
+import type { PostEntry } from "@/utils/posts"
+import { getPrimaryCategories } from "@/config/taxonomy"
+import {
+  getTotalPages,
+  getPageSlice,
+  getPaginationLinks,
+} from "@/utils/pagination"
+import { POSTS_PER_PAGE } from "@/config/pagination"
+
+interface Props {
+  posts: PostEntry[]
+  currentPage: number
+  pageBasePath: string
+  title: string
+  subtitle: string
+  pageHeading: string
+  eyebrow?: string
+  currentCategory?: string | null
+}
+
+const {
+  posts,
+  currentPage,
+  pageBasePath,
+  title,
+  subtitle,
+  pageHeading,
+  eyebrow,
+  currentCategory = null,
+} = Astro.props
+
+const totalPages = getTotalPages(posts.length, POSTS_PER_PAGE)
+const safePage = Math.max(1, Math.min(currentPage, totalPages))
+const pagePosts = getPageSlice(posts, safePage, POSTS_PER_PAGE)
+
+const normalizedBasePath = pageBasePath.replace(/\/+$/, "") + "/"
+const buildPageUrl = (page: number): string =>
+  page === 1
+    ? normalizedBasePath
+    : `${normalizedBasePath}page/${page}/`
+
+const links = getPaginationLinks({
+  currentPage: safePage,
+  totalPages,
+  buildPageUrl,
+})
+
+const primaryCategories = getPrimaryCategories().map((c) => ({
+  slug: c.slug,
+  label: c.labelByLocale.en,
+}))
+
+const layoutPath = normalizedBasePath.replace(/\/$/, "/")
+const totalCount = posts.length
+---
+
+<Layout path={layoutPath} title={title} description={subtitle}>
+  <section class="surface-violet halo relative isolate overflow-hidden">
+    <div
+      class="mx-auto grid w-full max-w-6xl gap-10 px-5 pt-16 pb-10 sm:px-7 sm:pt-20 sm:pb-14 lg:gap-14 lg:pt-24 lg:pb-16"
+    >
+      <header class="flex max-w-3xl flex-col gap-4">
+        <span class="editorial-hero__eyebrow-rule" aria-hidden="true"></span>
+        <p class="eyebrow">
+          {eyebrow ??
+            (safePage > 1
+              ? `Archive · page ${safePage} of ${totalPages}`
+              : "Archive")}
+        </p>
+        <AccentHeading
+          level={1}
+          text={pageHeading}
+          accentWords={[]}
+          class="page-title text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl"
+        />
+        <p class="max-w-2xl font-serif text-base leading-7 opacity-90 sm:text-lg">
+          {subtitle}
+        </p>
+        <div class="mt-2 flex flex-wrap items-center gap-3 text-sm">
+          <a class="btn-secondary" href="/about/">About Nite</a>
+          <a
+            class="inline-flex items-center gap-1 underline-offset-4 hover:underline"
+            href="/rss.xml"
+            rel="alternate"
+          >
+            <Icon name="rss" class="size-3.5" />
+            <span>Subscribe via RSS</span>
+          </a>
+        </div>
+      </header>
+    </div>
+  </section>
+
+  <section class="mx-auto w-full max-w-6xl px-5 pt-10 pb-6 sm:px-7 sm:pt-14">
+    <CategoryChips
+      categories={primaryCategories}
+      allLabel="All essays"
+      allHref={pageBasePath}
+      currentCategory={currentCategory}
+    />
+    <p class="mt-4 text-xs text-muted-foreground">
+      {totalCount === 0
+        ? "No essays here yet"
+        : `${totalCount} ${totalCount === 1 ? "essay" : "essays"}`}
+      {totalPages > 1 ? ` · page ${safePage} of ${totalPages}` : ""}
+    </p>
+  </section>
+
+  {
+    pagePosts.length === 0 ? (
+      <section class="mx-auto w-full max-w-6xl px-5 pb-20 sm:px-7 sm:pb-24">
+        <p class="font-serif text-base leading-7 opacity-80 sm:text-lg">
+          No essays in this archive yet — write something.
+        </p>
+      </section>
+    ) : (
+      <section class="mx-auto w-full max-w-6xl px-5 pb-12 sm:px-7 sm:pb-16">
+        <PostGrid posts={pagePosts} featuredFirst={safePage === 1} />
+      </section>
+    )
+  }
+
+  {
+    totalPages > 1 ? (
+      <section class="mx-auto w-full max-w-6xl px-5 pb-20 sm:px-7 sm:pb-24">
+        <Pagination
+          prev={links.prev}
+          next={links.next}
+          pages={links.pages}
+          currentPage={safePage}
+          totalPages={totalPages}
+        />
+      </section>
+    ) : null
+  }
+
+  <NewsletterStrip />
+</Layout>

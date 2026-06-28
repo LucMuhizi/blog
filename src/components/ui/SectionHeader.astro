@@ -1,0 +1,59 @@
+---
+import Icon from "@/components/ui/Icon.astro"
+
+interface Props {
+  eyebrow: string
+  title: string
+  titleId?: string
+  ctaLabel?: string
+  ctaUrl?: string
+  ctaIcon?: "arrow-right" | "arrow-up-right"
+  align?: "default" | "between"
+  onSurface?: "warm-light" | "violet"
+  class?: string
+}
+
+const {
+  eyebrow,
+  title,
+  titleId,
+  ctaLabel,
+  ctaUrl,
+  ctaIcon = "arrow-right",
+  align = "between",
+  onSurface = "warm-light",
+  class: className = "",
+} = Astro.props
+
+const eyebrowRuleClass =
+  onSurface === "violet" ? "section-rule" : "section-rule"
+---
+
+<header
+  class:list={[
+    "mb-8 flex gap-4 sm:mb-10",
+    align === "between" ? "items-end justify-between" : "flex-col",
+    className,
+  ]}
+>
+  <div class="flex flex-col gap-3">
+    <span class={eyebrowRuleClass} aria-hidden="true"></span>
+    <p class="eyebrow">{eyebrow}</p>
+    <h2 id={titleId} class="section-title">{title}</h2>
+    <slot name="subtitle" />
+  </div>
+  {
+    ctaLabel && ctaUrl ? (
+      <a
+        class:list={[
+          "inline-flex items-center gap-1 text-sm underline-offset-4 hover:underline",
+          align === "default" ? "mt-1" : "hidden sm:inline-flex",
+        ]}
+        href={ctaUrl}
+      >
+        <span>{ctaLabel}</span>
+        <Icon name={ctaIcon} class="size-4" />
+      </a>
+    ) : null
+  }
+</header>

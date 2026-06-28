@@ -1,0 +1,22 @@
+---
+import Layout from "@/layouts/main.astro"
+import PageHeader from "@/components/layout/PageHeader.astro"
+import PageSection from "@/components/layout/PageSection.astro"
+import PagefindSearch from "@/components/features/PagefindSearch.astro"
+---
+
+<Layout
+  path="/search/"
+  title="Search"
+  description="Search Nite Tanzarn posts and pages."
+  noindex
+>
+  <PageSection>
+    <PageHeader
+      title="Search"
+      subtitle="Search across Nite Tanzarn posts and pages."
+      class="search-header"
+    />
+    <PagefindSearch class="mx-auto max-w-2xl" />
+  </PageSection>
+</Layout>

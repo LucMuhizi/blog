@@ -1,0 +1,104 @@
+---
+import OptimizedPicture from "@/components/features/OptimizedPicture.astro"
+import Icon from "@/components/ui/Icon.astro"
+import { SITE_CONFIG } from "@/config/site"
+import { getPrimaryCategories } from "@/config/taxonomy"
+import { localePath } from "@/utils/routes"
+import logo from "@/assets/logo.svg"
+
+const locale = "en"
+const primaryCategories = getPrimaryCategories()
+const year = new Date().getFullYear()
+---
+
+<footer class="site-footer w-full" data-pagefind-ignore>
+  <div
+    class="mx-auto grid max-w-6xl gap-10 px-5 py-12 text-sm sm:px-7 sm:py-16 md:grid-cols-[1.4fr_2fr_1fr] md:gap-12"
+  >
+    <div class="flex flex-col items-start gap-4">
+      <a
+        href={localePath("/")}
+        class="flex items-center gap-3 font-serif text-xl font-semibold tracking-[-0.01em]"
+      >
+        <OptimizedPicture
+          src={logo}
+          alt={`${SITE_CONFIG.name} logo`}
+          variant="logo"
+          width={32}
+          height={32}
+          class="site-logo size-8"
+          loading="lazy"
+        />
+        <span class="site-footer__brand" aria-hidden="true">{SITE_CONFIG.name}</span>
+      </a>
+      <p class="max-w-xs font-serif text-sm leading-6 opacity-80">
+        An intellectual infrastructure for structural equity.
+      </p>
+      <a class="btn-secondary" href={localePath("/about/")}>Read about Nite</a>
+    </div>
+
+    <div class="grid grid-cols-2 gap-x-6 gap-y-4 md:grid-cols-3">
+      {
+        primaryCategories.slice(0, 6).map((category) => (
+          <nav
+            class="grid w-full content-start gap-2 text-start"
+            aria-label={category.labelByLocale[locale]}
+          >
+            <a
+              class="font-serif text-base font-semibold underline-offset-4 hover:underline"
+              href={localePath(`/category/${category.slug}/`)}
+            >
+              {category.labelByLocale[locale]}
+            </a>
+            <a
+              class="text-sm leading-6 underline-offset-4 hover:underline opacity-80"
+              href={localePath("/posts/")}
+            >
+              All essays
+            </a>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="flex flex-col items-start gap-4 md:items-end md:text-end">
+      <p class="font-serif text-sm leading-6 opacity-80">
+        Reach Nite for research, training, and consultancy.
+      </p>
+      <div class="flex flex-wrap items-center gap-3 text-sm md:justify-end">
+        {SITE_CONFIG.contact?.email ? (
+          <a
+            class="inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+            href={`mailto:${SITE_CONFIG.contact.email}`}
+          >
+            <Icon name="mail" class="size-3.5" dataIcon="inline-start" />
+            <span>Email</span>
+          </a>
+        ) : null}
+        {SITE_CONFIG.social?.x ? (
+          <a
+            class="inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+            href={SITE_CONFIG.social.x}
+            rel="me noopener"
+          >
+            <Icon name="at-sign" class="size-3.5" dataIcon="inline-start" />
+            <span>X</span>
+          </a>
+        ) : null}
+        <a
+          class="inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+          href="/rss.xml"
+          rel="alternate"
+        >
+          <Icon name="rss" class="size-3.5" dataIcon="inline-start" />
+          <span>RSS</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="md:col-span-3 flex items-center justify-between gap-4 border-t border-current/20 pt-4 text-xs opacity-75">
+      <p>© {year} {SITE_CONFIG.name}</p>
+      <p>NITE TANZARN IntellectNest</p>
+    </div>
+  </div>
+</footer>

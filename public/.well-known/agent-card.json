@@ -1,0 +1,31 @@
+{
+  "name": "Blog Content",
+  "version": "1.0.0",
+  "description": "Read-only public content discovery for Blog, a multilingual static editorial site. All content is freely accessible without authentication, payment, or registration.",
+  "url": "https://blog.zbz.ai",
+  "supportedInterfaces": [
+    {
+      "transport": "https",
+      "url": "https://blog.zbz.ai/llms.txt"
+    }
+  ],
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "access": {
+    "authentication": "none",
+    "payment": "none",
+    "registration": "none",
+    "apiEndpoints": "none",
+    "notes": "All public content is freely accessible. The /api and /api/v1 paths referenced in some older discovery files are not implemented in the current deployment. The optional x402 payment gateway is disabled (X402_ENABLED=false in wrangler.jsonc). See auth.md for the full access contract."
+  },
+  "skills": [
+    {
+      "id": "blog-content",
+      "name": "Blog Content Discovery",
+      "description": "Find public posts, locale routes, RSS feeds, and machine-readable content indexes."
+    }
+  ]
+}

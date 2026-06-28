@@ -1,0 +1,112 @@
+---
+import Layout from "@/layouts/main.astro"
+import EditorialHero from "@/components/cards/EditorialHero.astro"
+import ServiceCard from "@/components/cards/ServiceCard.astro"
+import ProfileCard from "@/components/cards/ProfileCard.astro"
+import PostGrid from "@/components/lists/PostGrid.astro"
+import NewsletterStrip from "@/components/ui/NewsletterStrip.astro"
+import SectionHeader from "@/components/ui/SectionHeader.astro"
+import { SITE_CONFIG } from "@/config/site"
+import { getPosts } from "@/utils/posts"
+import { getAuthor } from "@/utils/content"
+
+const posts = await getPosts()
+const featurePosts = posts.slice(0, 7)
+const author = await getAuthor("default")
+const authorData = author?.data
+
+const heroHeadline = SITE_CONFIG.hero.headline
+const heroSubheadline = SITE_CONFIG.hero.subheadline
+
+const services = SITE_CONFIG.services ?? []
+---
+
+<Layout
+  path="/"
+  title={heroHeadline}
+  description={SITE_CONFIG.description}
+  image={featurePosts[0]?.data.heroImage}
+>
+  <EditorialHero
+    surface="violet"
+    author={authorData
+      ? {
+          name: authorData.name,
+          role: authorData.role,
+          tagline: authorData.tagline,
+          location: authorData.location,
+        }
+      : undefined}
+    heading={heroHeadline}
+    subheadline={heroSubheadline}
+    ctaLabel={SITE_CONFIG.hero.ctaLabel}
+    ctaUrl={SITE_CONFIG.hero.ctaUrl}
+    secondaryLabel="Engage us"
+    secondaryUrl="/services/"
+    accentWords={["Agency", "Authority", "Architecture"]}
+  />
+
+  <section
+    class="mx-auto w-full max-w-6xl px-5 py-16 sm:px-7 sm:py-20 lg:py-24"
+    data-pagefind-ignore
+    aria-labelledby="services-title"
+  >
+    <SectionHeader
+      eyebrow="What we do"
+      title="Engagements and frameworks"
+      titleId="services-title"
+      ctaLabel="Engage us"
+      ctaUrl="/services/"
+    />
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2 lg:grid-cols-4">
+      {services.map((service, index) => (
+        <ServiceCard
+          title={service.title}
+          summary={service.summary}
+          href={service.href}
+          detail={service.detail}
+          index={index}
+          domainIndex={index}
+        />
+      ))}
+    </div>
+  </section>
+
+  <section
+    class="mx-auto w-full max-w-6xl px-5 pb-16 sm:px-7 sm:pb-20"
+    data-pagefind-ignore
+    aria-labelledby="latest-title"
+  >
+    <SectionHeader
+      eyebrow="Recent work"
+      title="Latest essays"
+      titleId="latest-title"
+      ctaLabel="See all essays"
+      ctaUrl="/posts/"
+    />
+
+    <PostGrid posts={featurePosts} featuredFirst={true} />
+  </section>
+
+  {
+    authorData ? (
+      <section
+        class="mx-auto w-full max-w-6xl px-5 pb-20 sm:px-7 sm:pb-24"
+        data-pagefind-ignore
+        aria-labelledby="profile-title"
+      >
+        <SectionHeader
+          eyebrow="About the author"
+          title="Who writes here"
+          titleId="profile-title"
+          ctaLabel="Read about"
+          ctaUrl="/about/"
+        />
+        <ProfileCard author={author} ctaHref="/about/" ctaLabel="Read about" />
+      </section>
+    ) : null
+  }
+
+  <NewsletterStrip />
+</Layout>

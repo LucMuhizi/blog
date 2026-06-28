@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agentskills.io/schemas/skills-index/v0.2.0.json",
+  "skills": [
+    {
+      "name": "blog-content",
+      "type": "skill-md",
+      "description": "Discover and read Blog's public multilingual editorial content.",
+      "url": "/.well-known/agent-skills/blog-content/SKILL.md",
+      "sha256": "65da279ef86320f1e01ca00d8f3e278141f115e14c429f9915ed9f2847fc5059"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "resource": "https://blog.zbz.ai",
+  "authorization_servers": [
+    "https://blog.zbz.ai"
+  ],
+  "scopes_supported": [
+    "content.read",
+    "x402.pay"
+  ],
+  "bearer_methods_supported": [
+    "header"
+  ],
+  "resource_documentation": "https://blog.zbz.ai/auth.md"
+}

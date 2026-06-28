@@ -1,0 +1,65 @@
+---
+interface Props {
+  stats?: Array<{ value: string; label: string }>
+  eyebrow?: string
+  title?: string
+  attribution?: string
+  mode?: "default" | "hero" | "about"
+}
+
+const {
+  stats = [],
+  eyebrow = "At a glance",
+  title,
+  attribution,
+  mode = "default",
+} = Astro.props
+
+const fallback = [
+  { value: "30+", label: "Years of practice" },
+  { value: "40+", label: "Countries engaged" },
+  { value: "120+", label: "Essays & reports" },
+  { value: "18", label: "UN agencies advised" },
+]
+
+const figures = stats.length > 0 ? stats : fallback
+const rootClass = [
+  "credibility-strip",
+  mode === "hero" ? "credibility-strip--hero" : "",
+]
+  .filter(Boolean)
+  .join(" ")
+---
+
+<section
+  class={rootClass}
+  aria-labelledby="credibility-strip-title"
+  data-pagefind-ignore
+>
+  <header class="credibility-strip__header">
+    <p class="credibility-strip__eyebrow">{eyebrow}</p>
+    {title ? (
+      <h3 id="credibility-strip-title" class="credibility-strip__title">
+        {title}
+      </h3>
+    ) : null}
+    {attribution ? (
+      <p class="credibility-strip__attribution">{attribution}</p>
+    ) : null}
+  </header>
+  <ol
+    class="credibility-strip__cells grid grid-cols-2 gap-0 px-1 pb-1 lg:px-0 lg:pb-0"
+    role="list"
+  >
+    {
+      figures.map((figure) => (
+        <li class="credibility-strip__cell flex flex-col gap-3 px-4 py-6 lg:py-10 lg:px-7">
+          <span class="credibility-strip__figure">
+            {figure.value}
+          </span>
+          <span class="credibility-strip__label">{figure.label}</span>
+        </li>
+      ))
+    }
+  </ol>
+</section>

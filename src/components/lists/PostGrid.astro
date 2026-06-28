@@ -1,0 +1,141 @@
+---
+import type { PostEntry } from "@/utils/posts"
+import { postCategorySlug, postTagSlugs, postUrl } from "@/utils/posts"
+import { getCategory } from "@/config/taxonomy"
+import OptimizedPicture from "@/components/features/OptimizedPicture.astro"
+
+interface Props {
+  posts: PostEntry[]
+  featuredFirst?: boolean
+}
+
+const { posts, featuredFirst = true } = Astro.props
+if (posts.length === 0) return null
+
+const featuredIndex = featuredFirst
+  ? posts.findIndex((post) => post.data.featured)
+  : -1
+const featured =
+  featuredIndex >= 0 ? posts[featuredIndex] : posts[0]
+
+const rest = posts.filter((_, index) => index !== (featuredIndex >= 0 ? featuredIndex : 0))
+
+const dateFormatter = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+})
+
+const featuredCategorySlug = postCategorySlug(featured)
+const featuredCategory = getCategory(featuredCategorySlug)
+const featuredCategoryLabel =
+  featuredCategory?.labelByLocale.en ?? featuredCategorySlug
+---
+
+<div class="post-grid" data-post-grid>
+  {featured ? (
+    <article
+      class="post-card relative col-span-full flex flex-col gap-0 sm:flex-row"
+      data-post-card-link={postUrl(featured)}
+      data-post-category={featuredCategorySlug}
+    >
+      <a href={postUrl(featured)} class="post-card__image relative block aspect-[16/9] w-full overflow-hidden sm:aspect-auto sm:h-auto sm:min-h-[24rem] sm:w-1/2">
+        <OptimizedPicture
+          src={featured.data.heroImage}
+          alt={featured.data.heroImageAlt}
+          width={featured.data.heroImageWidth}
+          height={featured.data.heroImageHeight}
+          widths={[640, 960, 1200, 1600]}
+          sizes="(max-width: 640px) calc(100vw - 2.5rem), 50vw"
+          priority
+          class="h-full w-full object-cover"
+        />
+      </a>
+      <div class="post-card__body flex flex-1 flex-col gap-4 px-5 py-6 sm:px-7 sm:py-8">
+        <div class="flex items-center gap-3 text-xs">
+          <span class="post-card__category">{featuredCategoryLabel}</span>
+          <span class="post-card__meta">
+            <time datetime={featured.data.pubDate.toISOString()}>
+              {dateFormatter.format(featured.data.pubDate)}
+            </time>
+          </span>
+          {featured.data.readingTime ? (
+            <span class="post-card__meta">
+              {featured.data.readingTime} min read
+            </span>
+          ) : null}
+        </div>
+        <h2 class="card-title card-title--lg text-balance text-2xl leading-tight sm:text-3xl">
+          <a href={postUrl(featured)}>{featured.data.title}</a>
+        </h2>
+        <p class="font-serif text-base leading-7 opacity-90 sm:text-lg">
+          {featured.data.description}
+        </p>
+        <div class="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+          {((featured.data.tags ?? []).slice(0, 3)).map((tag) => (
+            <span class="post-card__category opacity-80">{tag}</span>
+          ))}
+        </div>
+      </div>
+    </article>
+  ) : null}
+
+  <div class="post-grid__row mt-10 grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-2">
+    {rest.map((post) => {
+      const categorySlug = postCategorySlug(post)
+      const category = getCategory(categorySlug)
+      const categoryLabel = category?.labelByLocale.en ?? categorySlug
+      const tagSlugs = postTagSlugs(post)
+      return (
+        <article
+          class="post-card flex flex-col gap-0"
+          data-post-card-link={postUrl(post)}
+          data-post-category={categorySlug}
+        >
+          <a
+            href={postUrl(post)}
+            class="post-card__image relative block aspect-[16/10] w-full overflow-hidden"
+          >
+            <OptimizedPicture
+              src={post.data.heroImage}
+              alt={post.data.heroImageAlt}
+              width={post.data.heroImageWidth}
+              height={post.data.heroImageHeight}
+              widths={[420, 640, 768, 960]}
+              sizes="(max-width: 1023px) calc(100vw - 2.5rem), 42vw"
+              class="h-full w-full object-cover"
+            />
+          </a>
+          <div class="post-card__body flex flex-col gap-3 px-5 py-5">
+            <div class="flex flex-wrap items-center gap-3 text-xs">
+              <span class="post-card__category">{categoryLabel}</span>
+              <span class="post-card__meta">
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {dateFormatter.format(post.data.pubDate)}
+                </time>
+              </span>
+              {post.data.readingTime ? (
+                <span class="post-card__meta">
+                  {post.data.readingTime} min read
+                </span>
+              ) : null}
+            </div>
+            <h3 class="card-title line-clamp-3">
+              <a href={postUrl(post)}>{post.data.title}</a>
+            </h3>
+            <p class="line-clamp-3 font-serif text-sm leading-7 opacity-90 sm:text-base">
+              {post.data.description}
+            </p>
+            {tagSlugs.length > 0 ? (
+              <div class="mt-1 flex flex-wrap items-center gap-2 text-xs">
+                {tagSlugs.slice(0, 3).map((slug) => (
+                  <span class="post-card__category opacity-70">{slug}</span>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </article>
+      )
+    })}
+  </div>
+</div>

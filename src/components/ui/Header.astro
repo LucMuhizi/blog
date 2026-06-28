@@ -1,0 +1,96 @@
+---
+import { SITE_CONFIG } from "@/config/site"
+import { localePath } from "@/utils/routes"
+import { t } from "@/utils/translations"
+import OptimizedPicture from "@/components/features/OptimizedPicture.astro"
+import Icon from "@/components/ui/Icon.astro"
+import MobileNav from "@/components/islands/MobileNav.astro"
+import ThemeSwitcher from "@/components/islands/ThemeSwitcher.astro"
+import logo from "@/assets/logo.svg"
+
+const locale = "en"
+
+const moreLinks: { href: string; labelKey: string }[] = [
+  { href: "/values/", labelKey: "pages.values.title" },
+  { href: "/contact/", labelKey: "pages.contact.title" },
+  { href: "/services/", labelKey: "pages.services.title" },
+  { href: "/annotations/", labelKey: "pages.annotations.title" },
+]
+---
+
+<header class="site-header relative z-40 w-full" data-pagefind-ignore>
+  <div
+    class="mx-auto grid h-16 max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 sm:px-7 lg:grid-cols-[1fr_auto_1fr]"
+  >
+    <a
+      href={localePath("/")}
+      class="flex min-w-0 items-center gap-3 justify-self-start font-serif text-lg font-semibold tracking-[-0.01em]"
+      data-header-brand
+    >
+      <OptimizedPicture
+        src={logo}
+        alt={`${SITE_CONFIG.name} logo`}
+        width={28}
+        height={28}
+        widths={[28, 56]}
+        sizes="28px"
+        class="site-logo size-7"
+        loading="eager"
+      />
+      <span class="truncate" aria-hidden="true">{SITE_CONFIG.name}</span>
+    </a>
+
+    <nav
+      class="hidden items-center gap-7 justify-self-center text-sm lg:col-start-2 lg:flex"
+      aria-label="Primary navigation"
+    >
+      <a class="nav-link" href={localePath("/")}>{t(locale, "pages.home.title")}</a>
+      <a class="nav-link" href={localePath("/about/")}>{t(locale, "pages.about.title")}</a>
+      <a class="nav-link" href={localePath("/posts/")}>{t(locale, "navigation.musings")}</a>
+
+      <div class="group relative py-4">
+        <button
+          type="button"
+          class="nav-link inline-flex items-center gap-1"
+          aria-haspopup="true"
+          aria-label={t(locale, "navigation.more")}
+        >
+          {t(locale, "navigation.more")}
+          <Icon
+            name="chevron-down"
+            class="size-3.5 opacity-70 transition-transform group-hover:rotate-180 group-focus-within:rotate-180"
+          />
+        </button>
+        <div
+          class="nav-dropdown pointer-events-none absolute top-full right-0 grid min-w-44 translate-y-1 gap-1 rounded-md p-1.5 opacity-0 shadow-lg transition-all duration-200 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
+        >
+          {moreLinks.map((item) => (
+            <a
+              class="rounded-sm px-3 py-2 text-sm transition-colors hover:bg-muted"
+              href={localePath(item.href)}
+            >
+              {t(locale, item.labelKey)}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <a class="nav-link" href={localePath("/search/")}>{t(locale, "search.title")}</a>
+    </nav>
+
+    <div
+      class="col-start-2 flex items-center gap-1 justify-self-end sm:gap-2 lg:col-start-3"
+      data-header-actions
+    >
+      <a
+        class="inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted lg:hidden"
+        href={localePath("/search/")}
+        aria-label="Search"
+      >
+        <Icon name="search" class="size-4" dataIcon="inline-start" />
+      </a>
+      <ThemeSwitcher />
+      <MobileNav />
+    </div>
+  </div>
+</header>

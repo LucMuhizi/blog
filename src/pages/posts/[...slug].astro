@@ -1,0 +1,205 @@
+---
+import { getCollection, render } from "astro:content"
+import Layout from "@/layouts/main.astro"
+import ProseContent from "@/components/layout/ProseContent.astro"
+import OptimizedPicture from "@/components/features/OptimizedPicture.astro"
+import ReadingProgressBar from "@/components/features/ReadingProgressBar.astro"
+import NewsletterStrip from "@/components/ui/NewsletterStrip.astro"
+import AccentHeading from "@/components/ui/AccentHeading.astro"
+import Icon from "@/components/ui/Icon.astro"
+import { postPath, postSlug } from "@/utils/posts"
+import { getAuthor } from "@/utils/content"
+import { getCategory } from "@/config/taxonomy"
+import { SITE_CONFIG } from "@/config/site"
+
+export async function getStaticPaths() {
+  const posts = await getCollection(
+    "post",
+    (entry) => !entry.data.draft
+  )
+  return posts.map((post) => ({
+    params: { slug: postSlug(post) },
+    props: { post },
+  }))
+}
+
+const { post } = Astro.props
+const { Content, headings } = await render(post)
+const author = await getAuthor(post.data.authors[0] ?? "default")
+const path = postPath(post)
+const fallbackAuthor = author?.data?.name ?? SITE_CONFIG.name
+
+const categorySlug = (post.data.category ?? "")
+  .toString()
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g, "-")
+const category = getCategory(categorySlug) ?? null
+const categoryLabel = category?.labelByLocale.en ?? categorySlug
+
+const dateFormatter = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+})
+const publishedLabel = dateFormatter.format(post.data.pubDate)
+const updatedLabel = post.data.updatedDate
+  ? dateFormatter.format(post.data.updatedDate)
+  : null
+
+const wordCount = (post.body ?? "").split(/\s+/).filter(Boolean).length
+const readingTimeText = post.data.readingTime
+  ? `${post.data.readingTime} min read`
+  : `${Math.max(1, Math.round(wordCount / 220))} min read`
+
+const viewCount = post.data.viewCount
+
+const tocTitle = "Contents"
+const tocHeadings = (headings ?? [])
+  .filter((h) => h.depth === 2 || h.depth === 3)
+  .map((h) => ({ depth: h.depth as 2 | 3, text: h.text, slug: h.slug }))
+
+const pdfUrl = post.data.pdfDownload ?? null
+
+const titleWords = post.data.title.split(/\s+/).filter(Boolean)
+const accentCount = Math.max(1, Math.min(2, Math.floor(titleWords.length / 3)))
+const accentWords = titleWords.slice(0, accentCount).map((word) =>
+  word.replace(/[^\p{L}\p{N}'-]+/gu, "")
+)
+---
+
+<Layout
+  path={path}
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.heroImage}
+  imageAlt={post.data.heroImageAlt}
+  ogType="article"
+>
+  <ReadingProgressBar />
+
+  <article
+    class="mx-auto w-full max-w-6xl px-0 sm:px-0"
+    data-pagefind-body
+  >
+    <section class="surface-violet halo relative isolate overflow-hidden">
+      <div class="mx-auto grid w-full max-w-6xl gap-6 px-5 py-14 sm:px-7 sm:py-20 lg:py-24">
+        <nav aria-label="Breadcrumb" class="mb-2 flex flex-wrap items-center gap-2 text-xs">
+          <a class="breadcrumb-link" href="/posts/">Archive</a>
+          <Icon name="chevron-right" class="size-3 opacity-60" />
+          <a class="breadcrumb-link" href={`/posts/#${categorySlug}`}>{categoryLabel}</a>
+          <Icon name="chevron-right" class="size-3 opacity-60" />
+          <span class="opacity-70">Current essay</span>
+        </nav>
+
+        <p class="eyebrow">{categoryLabel}</p>
+        <AccentHeading
+          level={1}
+          text={post.data.title}
+          accentWords={accentWords}
+          class="article-title text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl"
+        />
+        <p class="mt-2 max-w-3xl font-serif text-base leading-7 opacity-90 sm:text-lg">
+          {post.data.description}
+        </p>
+
+        <div class="article-meta mt-5">
+          <time datetime={post.data.pubDate.toISOString()}>{publishedLabel}</time>
+          <span class="article-meta__pill">{fallbackAuthor}</span>
+          <span>{readingTimeText}</span>
+          {viewCount ? <span>{viewCount} views</span> : null}
+          {pdfUrl ? (
+            <a
+              class="article-meta__pill inline-flex items-center gap-1.5"
+              href={pdfUrl}
+              rel="noopener"
+            >
+              <Icon name="download" class="size-3" />
+              <span>PDF</span>
+            </a>
+          ) : null}
+          {updatedLabel ? (
+            <span class="opacity-80">Updated {updatedLabel}</span>
+          ) : null}
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto w-full max-w-6xl px-5 py-10 sm:px-7 sm:py-14">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-12">
+        <div class="min-w-0">
+          {
+            post.data.heroImage ? (
+              <figure class="mb-10 overflow-hidden rounded-md border border-current/15">
+                <OptimizedPicture
+                  src={post.data.heroImage}
+                  alt={post.data.heroImageAlt ?? post.data.title}
+                  width={post.data.heroImageWidth}
+                  height={post.data.heroImageHeight}
+                  priority
+                  class="h-auto w-full object-cover"
+                />
+              </figure>
+            ) : null
+          }
+
+          <ProseContent class="article-prose max-w-none">
+            <Content />
+          </ProseContent>
+
+          <footer class="mt-12 border-t border-current/20 pt-6">
+            <p class="eyebrow">Tags</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              {(post.data.tags ?? []).map((tag) => (
+                <a
+                  class="article-meta__pill transition-transform hover:-translate-y-0.5"
+                  href={`/posts/#${tag}`}
+                >
+                  {tag}
+                </a>
+              ))}
+            </div>
+
+            <div class="mt-8 flex flex-wrap items-center justify-between gap-4">
+              <a class="btn-secondary" href="/posts/">Back to archive</a>
+              {pdfUrl ? (
+                <a class="btn-primary" href={pdfUrl} rel="noopener">
+                  <Icon name="download" class="size-4" dataIcon="inline-start" />
+                  <span>Download PDF</span>
+                </a>
+              ) : null}
+            </div>
+          </footer>
+        </div>
+
+        {tocHeadings.length >= 3 ? (
+          <aside class="hidden lg:block">
+            <nav
+              class="article-toc"
+              aria-label={tocTitle}
+            >
+              <p class="article-toc__label">{tocTitle}</p>
+              <ul class="flex flex-col">
+                {tocHeadings.map((heading) => (
+                  <li>
+                    <a
+                      class:list={[
+                        "article-toc__link",
+                        heading.depth === 3 ? "article-toc__link--depth-3" : "",
+                      ]}
+                      href={`#${heading.slug}`}
+                    >
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+        ) : null}
+      </div>
+    </section>
+  </article>
+
+  <NewsletterStrip />
+</Layout>

@@ -1,0 +1,127 @@
+/* Generated from DESIGN.md. Do not edit manually unless the token export workflow changes. */
+@theme {
+  /* ── Warm light palette ─────────────────────────────────────────── */
+  --color-background: #FAF6EE;
+  --color-foreground: #16484A;
+  --color-card: #F0E8D6;
+  --color-card-foreground: #16484A;
+  --color-popover: #F0E8D6;
+  --color-popover-foreground: #16484A;
+  --color-primary: #16484A;
+  --color-primary-foreground: #FAF6EE;
+  --color-secondary: #EAE0CC;
+  --color-secondary-foreground: #16484A;
+  --color-muted: #EFEAE0;
+  --color-muted-foreground: #6B5F4A;
+  --color-accent: #9A7E3F;
+  --color-accent-foreground: #FAF6EE;
+  --color-destructive: #A8483B;
+  --color-border: #16484A1A;
+  --color-input: #16484A1A;
+  --color-ring: #9A7E3F;
+
+  /* ── Warm dark palette ──────────────────────────────────────────── */
+  --color-dark-background: #100E0A;
+  --color-dark-foreground: #F4ECD8;
+  --color-dark-card: #1A1714;
+  --color-dark-card-foreground: #F4ECD8;
+  --color-dark-popover: #1A1714;
+  --color-dark-popover-foreground: #F4ECD8;
+  --color-dark-primary: #F4ECD8;
+  --color-dark-primary-foreground: #100E0A;
+  --color-dark-secondary: #242018;
+  --color-dark-secondary-foreground: #F4ECD8;
+  --color-dark-muted: #1F1B14;
+  --color-dark-muted-foreground: #A89E84;
+  --color-dark-accent: #C9B99A;
+  --color-dark-accent-foreground: #100E0A;
+  --color-dark-border: #F4ECD81A;
+  --color-dark-input: #F4ECD81A;
+  --color-dark-ring: #C9B99A;
+
+  /* ── Brand accents ──────────────────────────────────────────────── */
+  --color-gold: #C9B99A;
+  --color-dark-gold: #E0CFA6;
+  --color-hairline: #16484A1A;
+  --color-dark-hairline: #F4ECD81A;
+
+  /* ── Vibrancy (warm light tones, slightly muted for AA contrast) ─── */
+  --color-accent-amber: #C9945A;
+  --color-accent-purple: #B07ADB;
+  --color-accent-teal: #5EAFB3;
+  --color-accent-rose: #E8A1A1;
+  --color-surface-violet: #070608;
+
+  /* ── Typography ─────────────────────────────────────────────────── */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-serif:
+    ui-serif, "Iowan Old Style", Georgia, "Apple Garamond", Cambria, "Times New Roman", Times, serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-heading: var(--font-serif);
+  --font-body: var(--font-serif);
+
+  --text-sans: 1rem;
+  --leading-sans: 1.55;
+  --font-weight-sans: 400;
+  --text-serif: 1.0625rem;
+  --leading-serif: 1.75;
+  --text-heading: 2rem;
+  --leading-heading: 1.18;
+  --tracking-heading: -0.01em;
+  --font-weight-heading: 600;
+  --text-hero-title: 3rem;
+  --leading-hero-title: 1.06;
+  --tracking-hero-title: -0.02em;
+  --font-weight-hero-title: 600;
+  --text-section-title: 2.25rem;
+  --leading-section-title: 1.12;
+  --tracking-section-title: -0.015em;
+  --text-stat: 3.25rem;
+  --leading-stat: 1.0;
+  --font-weight-stat: 600;
+  --text-article-body: 1.0625rem;
+  --leading-article-body: 1.75;
+  --text-nav: 0.875rem;
+  --leading-nav: 1.25;
+  --font-weight-nav: 500;
+  --text-eyebrow: 0.7rem;
+  --leading-eyebrow: 1.25;
+  --tracking-eyebrow: 0.18em;
+  --font-weight-eyebrow: 600;
+  --text-label: 0.75rem;
+  --leading-label: 1.25;
+  --tracking-label: 0.025em;
+  --font-weight-label: 600;
+  --text-small: 0.75rem;
+  --leading-small: 1.5;
+  --font-weight-small: 500;
+
+  /* ── Radii ──────────────────────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-card: 10px;
+  --radius-hero: 12px;
+  --radius-pill: 999px;
+  --radius-zero: 0px;
+
+  /* ── Spacing ────────────────────────────────────────────────────── */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 40px;
+  --spacing-xxl: 64px;
+  --spacing-page-x: 20px;
+  --spacing-page-x-sm: 28px;
+  --spacing-page-x-md: 40px;
+  --spacing-section-y: 64px;
+  --spacing-section-y-sm: 40px;
+
+  /* ── Hairlines ──────────────────────────────────────────────────── */
+  --hairline-width: 0.5px;
+  --rule-width: 1px;
+}

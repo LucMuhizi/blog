@@ -1,0 +1,44 @@
+---
+import PostArchiveBody from "@/components/lists/PostArchiveBody.astro"
+import { getPostsByCategory } from "@/utils/posts"
+import { getPrimaryCategories } from "@/config/taxonomy"
+import { getTotalPages } from "@/utils/pagination"
+import { POSTS_PER_PAGE } from "@/config/pagination"
+
+export async function getStaticPaths() {
+  const paths: Array<{
+    params: { category: string; page: string }
+    props: { category: ReturnType<typeof getPrimaryCategories>[number]; pageNumber: number }
+  }> = []
+
+  for (const taxonomyItem of getPrimaryCategories()) {
+    const posts = await getPostsByCategory(taxonomyItem.slug)
+    const totalPages = getTotalPages(posts.length, POSTS_PER_PAGE)
+    for (let i = 2; i <= totalPages; i++) {
+      paths.push({
+        params: { category: taxonomyItem.slug, page: String(i) },
+        props: { category: taxonomyItem, pageNumber: i },
+      })
+    }
+  }
+
+  return paths
+}
+
+const { category, pageNumber } = Astro.props
+const posts = await getPostsByCategory(category.slug)
+const title = `${category.labelByLocale.en} Essays`
+const subtitle = `${posts.length} ${posts.length === 1 ? "essay" : "essays"} · ${category.descriptionByLocale.en}`
+const eyebrow = `Archive · ${category.labelByLocale.en} · page ${pageNumber}`
+---
+
+<PostArchiveBody
+  posts={posts}
+  currentPage={pageNumber}
+  pageBasePath={`/posts/category/${category.slug}/`}
+  title={title}
+  subtitle={subtitle}
+  pageHeading={category.labelByLocale.en}
+  eyebrow={eyebrow}
+  currentCategory={category.slug}
+/>

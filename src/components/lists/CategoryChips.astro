@@ -1,0 +1,50 @@
+---
+interface Props {
+  categories: Array<{ slug: string; label: string }>
+  allLabel?: string
+  allHref?: string
+  currentCategory?: string | null
+}
+
+const {
+  categories,
+  allLabel = "All essays",
+  allHref = "/posts/",
+  currentCategory = null,
+} = Astro.props
+
+const isAllActive = currentCategory === null || currentCategory === ""
+---
+
+<div
+  class="flex flex-wrap items-center gap-2"
+  data-category-chips
+  role="toolbar"
+  aria-label="Browse essays by category"
+>
+  <p class="eyebrow mr-1">Browse</p>
+  <a
+    class="chip"
+    href={allHref}
+    aria-current={isAllActive ? "page" : undefined}
+    data-active={isAllActive ? "true" : "false"}
+  >
+    {allLabel}
+  </a>
+  {
+    categories.map((category) => {
+      const isActive = currentCategory === category.slug
+      return (
+        <a
+          class="chip"
+          href={`/posts/category/${category.slug}/`}
+          aria-current={isActive ? "page" : undefined}
+          data-active={isActive ? "true" : "false"}
+          data-category-slug={category.slug}
+        >
+          {category.label}
+        </a>
+      )
+    })
+  }
+</div>

@@ -1,0 +1,20 @@
+---
+import PostArchiveBody from "@/components/lists/PostArchiveBody.astro"
+import { getPosts } from "@/utils/posts"
+
+const posts = await getPosts()
+const title = "Reflective Musings"
+const subtitle = posts.length > 0
+  ? `${posts.length} essays in the archive`
+  : "Archive empty — write something."
+---
+
+<PostArchiveBody
+  posts={posts}
+  currentPage={1}
+  pageBasePath="/posts/"
+  title={title}
+  subtitle={subtitle}
+  pageHeading={title}
+  eyebrow="Archive"
+/>

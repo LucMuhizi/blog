@@ -1,0 +1,210 @@
+{
+  "site": {
+    "name": "Nite Tanzarn",
+    "titleTemplate": "%s · Nite Tanzarn",
+    "description": "Discover NITE TANZARN, a feminist online platform driving change through gender equality research, training, and consultancy.",
+    "twitter": {
+      "site": "@nitetanzarn",
+      "creator": "@nitetanzarn"
+    }
+  },
+  "theme": {
+    "toggle": "Toggle Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "Auto"
+  },
+  "dateFormat": "MMM D, YYYY",
+  "post": {
+    "publishedAt": "Published at",
+    "modifiedAt": "Modified at",
+    "relatedPosts": "Related Posts"
+  },
+  "categories": {
+    "life": "Life",
+    "invest": "Invest",
+    "build": "Startup",
+    "startup": "Startup"
+  },
+  "tags": {
+    "reflect": "Reflect",
+    "media": "Media",
+    "roam": "Roam",
+    "risk": "Risk",
+    "strategy": "Strategy",
+    "allocation": "Allocation",
+    "innovation": "Innovation",
+    "model": "Model",
+    "management": "Management",
+    "market": "Market"
+  },
+  "headings": {
+    "home": {
+      "title": "Home",
+      "h1": "Nite Tanzarn",
+      "h2": "Advancing Agency, Authority, and Architecture to dismantle structural inequality and design systems for equity."
+    },
+    "articles": {
+      "h1": "Articles",
+      "h2": "Long-form essays and reflection."
+    },
+    "research": {
+      "h1": "Research",
+      "h2": "Original research, field reports, and quantitative work."
+    },
+    "policy": {
+      "h1": "Policy",
+      "h2": "Policy briefs and frameworks."
+    },
+    "speaking": {
+      "h1": "Speaking & Media",
+      "h2": "Talks, panels, podcasts, and press mentions."
+    },
+    "notes": {
+      "h1": "Notes",
+      "h2": "Brief reflections and field notes."
+    },
+    "projects": {
+      "h1": "Projects",
+      "h2": "Consultancy and research projects."
+    }
+  },
+  "navigation": {
+    "build": "Articles",
+    "invest": "Research",
+    "life": "Notes",
+    "more": "More",
+    "musings": "Reflective Musings"
+  },
+  "pages": {
+    "home": {
+      "title": "Home"
+    },
+    "about": {
+      "title": "About"
+    },
+    "contact": {
+      "title": "Contact"
+    },
+    "values": {
+      "title": "Our Values"
+    },
+    "services": {
+      "title": "Consultancy"
+    },
+    "annotations": {
+      "title": "Annotations"
+    },
+    "author": {
+      "title": "Author",
+      "writingActivity": "Writing Activity",
+      "less": "Less",
+      "more": "More",
+      "contributionsInYear": "{count} posts published in {year}",
+      "links": "Author links"
+    },
+    "posts": {
+      "title": "All Posts",
+      "archiveEyebrow": "Archive",
+      "archiveTitle": "Reflective Musings",
+      "archiveSubtitle": "All published notes in reverse chronological order.",
+      "totalPosts": "{count} posts in total",
+      "pageTitle": "All Posts {page}",
+      "pageDescription": "Posts page {page}"
+    },
+    "categories": {
+      "title": "Categories",
+      "h2": "Browse Categories",
+      "description": "Explore topics and find articles by category.",
+      "eyebrow": "Category",
+      "relatedTags": "Related tags",
+      "noPosts": "No posts in this category yet."
+    },
+    "tags": {
+      "title": "Tags",
+      "h2": "Browse Tags",
+      "description": "Explore topics and find articles by tags.",
+      "eyebrow": "Tag",
+      "browseCategories": "Browse categories",
+      "noPosts": "No posts with this tag yet."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "notFound": "Not Found",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "readMore": "Read More",
+    "skipToContent": "Skip to content",
+    "about": "About",
+    "contact": "Contact",
+    "viewPdf": "Download PDF",
+    "readArticle": "Read article",
+    "viewAll": "View all",
+    "aria": {
+      "menu": "Menu",
+      "close": "Close",
+      "search": "Search"
+    },
+    "pagination": {
+      "totalPosts": "{count} posts in total",
+      "totalPostsWithLang": "{lang} {count} posts in total",
+      "pageInfo": "Page {current} of {total}",
+      "noPosts": "No posts",
+      "noPostsInCategory": "No posts in this category yet. Please check back later.",
+      "pageTitle": "Page {page}",
+      "pageLabel": "Page {page}",
+      "postsCount": "{count} posts"
+    }
+  },
+  "footer": {
+    "copyright": "Copyright",
+    "allRightsReserved": "All Rights Reserved",
+    "tagline": "An intellectual infrastructure for structural equity."
+  },
+  "homepage": {
+    "featuredPosts": "Featured Posts",
+    "ctaMusings": "Reflective Musings",
+    "topArticles": "Top Articles",
+    "latestArticles": "Latest essays",
+    "latestEyebrow": "Recent work",
+    "latestCta": "See all essays",
+    "servicesEyebrow": "What we do",
+    "servicesTitle": "Engagements and frameworks",
+    "servicesCta": "Engage us",
+    "profileEyebrow": "About the author",
+    "profileCta": "Read about",
+    "credibilityEyebrow": "At a glance",
+    "heroEyebrow": "Reflections, policy, and structure",
+    "browseArchive": "Browse archive"
+  },
+  "articles": {
+    "toc": "Contents",
+    "filterBy": "Filter by",
+    "all": "All",
+    "filter": {
+      "label": "Filter essays by category",
+      "all": "All essays",
+      "clear": "Clear filter"
+    },
+    "meta": {
+      "byline": "By {author}",
+      "readingTime": "{minutes} min read",
+      "wordCount": "{count} words",
+      "viewCount": "{count} views",
+      "pdfDownload": "Download PDF"
+    }
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "message": "Sorry, the page you are looking for does not exist or has been removed.",
+    "backToHome": "Back to Home",
+    "browsePosts": "Browse Posts"
+  },
+  "search": {
+    "title": "Search",
+    "subtitle": "Search for content you're interested in"
+  }
+}

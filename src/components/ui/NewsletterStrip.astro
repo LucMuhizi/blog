@@ -1,0 +1,81 @@
+---
+import Icon from "@/components/ui/Icon.astro"
+import { SITE_CONFIG } from "@/config/site"
+
+interface Props {
+  eyebrow?: string
+  title?: string
+  description?: string
+  formUrl?: string
+  inputPlaceholder?: string
+  submitLabel?: string
+  socialProof?: string
+  class?: string
+}
+
+const {
+  eyebrow = "Stay close",
+  title = "",
+  description = "",
+  formUrl = "",
+  inputPlaceholder = "Your email address",
+  submitLabel = "Subscribe",
+  socialProof = "Free monthly digest. Unsubscribe anytime.",
+  class: className = "",
+} = Astro.props
+
+const resolvedTitle = title || SITE_CONFIG.newsletter.headline || "Get the next essay in your inbox"
+const resolvedDescription =
+  description ||
+  SITE_CONFIG.newsletter.description ||
+  "Tanzarn delivers a short reflective essay each month on policy, structural equity, and the systems that shape daily life."
+const resolvedFormUrl = formUrl || SITE_CONFIG.newsletter.formUrl || ""
+const formAction = resolvedFormUrl || "mailto:info@nitetanzarn.com"
+const formMethod = resolvedFormUrl ? "POST" : "POST"
+---
+
+<section
+  class:list={["surface-violet halo relative isolate overflow-hidden", className]}
+  aria-labelledby="newsletter-strip-title"
+  data-pagefind-ignore
+>
+  <div
+    class="halo-card relative mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 sm:px-7 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-14 lg:py-24"
+  >
+    <div class="flex flex-col gap-4">
+      <span class="editorial-hero__eyebrow-rule" aria-hidden="true"></span>
+      <p class="eyebrow">{eyebrow}</p>
+      <h2 id="newsletter-strip-title" class="text-balance font-serif text-2xl font-semibold leading-tight sm:text-3xl lg:text-[2.5rem]">
+        {resolvedTitle}
+      </h2>
+      <p class="max-w-xl font-serif text-base leading-7 opacity-90 sm:text-lg">
+        {resolvedDescription}
+      </p>
+      <p class="mt-1 text-xs uppercase tracking-[0.18em] text-[color:var(--surface-violet-muted)]">
+        {socialProof}
+      </p>
+    </div>
+
+    <form
+      action={formAction}
+      method={formMethod}
+      class="flex w-full flex-col gap-3 sm:flex-row sm:items-stretch"
+      aria-label={resolvedTitle}
+    >
+      <label class="sr-only" for="newsletter-strip-email">Email address</label>
+      <input
+        id="newsletter-strip-email"
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        placeholder={inputPlaceholder}
+        class="newsletter-input"
+      />
+      <button type="submit" class="btn-gold-gradient">
+        <span>{submitLabel}</span>
+        <Icon name="arrow-right" class="ml-2 size-4" dataIcon="inline-end" />
+      </button>
+    </form>
+  </div>
+</section>

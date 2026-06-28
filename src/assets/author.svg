@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Nite Tanzarn">
+  <title>Nite Tanzarn</title>
+  <defs>
+    <radialGradient id="av-bg" cx="0.35" cy="0.30" r="0.95">
+      <stop offset="0%" stop-color="#FBF7EF"/>
+      <stop offset="60%" stop-color="#F2EAD6"/>
+      <stop offset="100%" stop-color="#E5D8B7"/>
+    </radialGradient>
+    <linearGradient id="av-ink" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#16484A"/>
+      <stop offset="100%" stop-color="#0E3336"/>
+    </linearGradient>
+    <clipPath id="av-clip">
+      <circle cx="128" cy="128" r="124"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#av-clip)">
+    <rect width="256" height="256" fill="url(#av-bg)"/>
+    <g fill="url(#av-ink)">
+      <path d="M52 196 V60 h22 v114 h66 v22 z"/>
+      <path d="M178 60 h-22 l-46 68 46 68 h22 l-46-68 z"/>
+    </g>
+    <circle cx="128" cy="128" r="120" fill="none" stroke="#16484A" stroke-opacity="0.18" stroke-width="2"/>
+  </g>
+</svg>

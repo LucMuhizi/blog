@@ -1,0 +1,62 @@
+---
+import PageHeader from "@/components/layout/PageHeader.astro"
+import PageSection from "@/components/layout/PageSection.astro"
+import Icon from "@/components/ui/Icon.astro"
+import { localePath } from "@/utils/routes"
+import { t } from "@/utils/translations"
+
+const locale = "en"
+const title = t(locale, "notFound.title")
+const message = t(locale, "notFound.message")
+const searchPrompt = t(locale, "search.subtitle")
+---
+
+<PageSection class="py-8 text-center" data-not-found-page>
+  <PageHeader title={title} subtitle={message} class="search-header" />
+  <div class="mx-auto w-full max-w-2xl text-left">
+    <p class="mb-5 text-sm text-muted-foreground">
+      {searchPrompt}
+    </p>
+    <form
+      class="not-found-search"
+      role="search"
+      aria-label={title}
+      action={localePath("/search/")}
+      data-not-found-search
+    >
+      <input
+        class="not-found-search__input"
+        type="search"
+        name="q"
+        aria-label={searchPrompt}
+        placeholder={searchPrompt}
+      />
+      <button
+        class="not-found-search__button"
+        type="submit"
+        data-not-found-search-button
+      >
+        <Icon name="search" class="size-4" dataIcon="inline-start" />
+        <span data-not-found-search-label>{t(locale, "search.title")}</span>
+      </button>
+    </form>
+  </div>
+  <nav
+    class="mt-6 flex flex-wrap items-center justify-center gap-2"
+    aria-label="Not found links"
+    data-not-found-nav
+  >
+    <a class="not-found-link" href={localePath("/")} data-not-found-home>
+      <Icon name="arrow-left" class="size-4" dataIcon="inline-start" />
+      <span>{t(locale, "notFound.backToHome")}</span>
+    </a>
+    <a
+      class="not-found-link"
+      href={localePath("/posts/")}
+      data-not-found-posts
+    >
+      <Icon name="newspaper" class="size-4" dataIcon="inline-start" />
+      <span>{t(locale, "notFound.browsePosts")}</span>
+    </a>
+  </nav>
+</PageSection>

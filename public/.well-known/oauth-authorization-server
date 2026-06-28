@@ -1,0 +1,39 @@
+{
+  "issuer": "https://blog.zbz.ai",
+  "authorization_endpoint": "https://blog.zbz.ai/oauth/authorize",
+  "token_endpoint": "https://blog.zbz.ai/oauth/token",
+  "jwks_uri": "https://blog.zbz.ai/.well-known/jwks.json",
+  "registration_endpoint": "https://blog.zbz.ai/auth.md",
+  "grant_types_supported": [
+    "client_credentials"
+  ],
+  "response_types_supported": [
+    "none"
+  ],
+  "token_endpoint_auth_methods_supported": [
+    "private_key_jwt",
+    "client_secret_post",
+    "none"
+  ],
+  "scopes_supported": [
+    "content.read",
+    "x402.pay"
+  ],
+  "service_documentation": "https://blog.zbz.ai/auth.md",
+  "agent_auth": {
+    "skill": "https://blog.zbz.ai/auth.md",
+    "register_uri": "https://blog.zbz.ai/auth.md",
+    "claim_uri": "https://blog.zbz.ai/api",
+    "revocation_uri": "https://blog.zbz.ai/auth.md#revocation-uri",
+    "identity_types_supported": [
+      "anonymous"
+    ],
+    "anonymous": {
+      "credential_types_supported": [
+        "x402"
+      ],
+      "claim_uri": "https://blog.zbz.ai/api"
+    },
+    "events_supported": []
+  }
+}

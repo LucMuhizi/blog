@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/main.astro"
+import NotFoundContent from "@/components/ui/NotFoundContent.astro"
+import { t } from "@/utils/translations"
+
+const locale = "en"
+const title = t(locale, "notFound.title")
+const description = t(locale, "notFound.message")
+---
+
+<Layout
+  path="/404/"
+  title={title}
+  description={description}
+  noindex
+>
+  <NotFoundContent />
+</Layout>

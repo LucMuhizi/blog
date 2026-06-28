@@ -1,0 +1,66 @@
+---
+interface Props {}
+
+const {} = Astro.props
+---
+
+<div class="reading-progress" aria-hidden="true" data-reading-progress>
+  <div class="reading-progress__fill" data-reading-progress-fill></div>
+</div>
+
+<script is:inline>
+  ;(() => {
+    const cleanupKey = "__readingProgressCleanup"
+    window[cleanupKey]?.()
+
+    const fillEl = () =>
+      document.querySelector("[data-reading-progress-fill]")
+
+    const articleEl = () =>
+      document.querySelector('[data-pagefind-body]') ||
+      document.querySelector("article")
+
+    let raf = 0
+
+    const update = () => {
+      raf = 0
+      const fill = fillEl()
+      const article = articleEl()
+      if (!(fill instanceof HTMLElement) || !(article instanceof HTMLElement)) {
+        return
+      }
+      const rect = article.getBoundingClientRect()
+      const viewportHeight = window.innerHeight || 0
+      const total = rect.height - viewportHeight
+      if (total <= 0) {
+        fill.style.width = "0%"
+        return
+      }
+      const scrolled = Math.min(Math.max(-rect.top, 0), total)
+      const pct = Math.round((scrolled / total) * 100)
+      fill.style.width = `${pct}%`
+    }
+
+    const schedule = () => {
+      if (raf) return
+      raf = window.requestAnimationFrame(update)
+    }
+
+    const handleScroll = () => schedule()
+    const handleResize = () => schedule()
+    const handlePageLoad = () => schedule()
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("resize", handleResize, { passive: true })
+    document.addEventListener("astro:page-load", handlePageLoad)
+
+    schedule()
+
+    window[cleanupKey] = () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleResize)
+      document.removeEventListener("astro:page-load", handlePageLoad)
+      if (raf) window.cancelAnimationFrame(raf)
+    }
+  })()
+</script>

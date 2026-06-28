@@ -1,0 +1,30 @@
+---
+import PostArchiveBody from "@/components/lists/PostArchiveBody.astro"
+import { getPosts } from "@/utils/posts"
+import { getTotalPages } from "@/utils/pagination"
+import { POSTS_PER_PAGE } from "@/config/pagination"
+
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  const totalPages = getTotalPages(posts.length, POSTS_PER_PAGE)
+  // Page 1 is served by /posts/index.astro; emit page 2..N only when needed.
+  return Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => ({
+    params: { page: String(i + 2) },
+  }))
+}
+
+const { page } = Astro.params
+const pageNumber = Number(page)
+const posts = await getPosts()
+const title = "Reflective Musings"
+const subtitle = `${posts.length} essays in the archive`
+---
+
+<PostArchiveBody
+  posts={posts}
+  currentPage={pageNumber}
+  pageBasePath="/posts/"
+  title={title}
+  subtitle={subtitle}
+  pageHeading={title}
+/>

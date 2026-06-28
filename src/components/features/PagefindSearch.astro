@@ -1,0 +1,107 @@
+---
+interface Props {
+  id?: string
+  label?: string
+  class?: string
+}
+
+const {
+  id = "search-page",
+  label = "Site search",
+  class: className = "",
+} = Astro.props
+const locale = "en"
+const hint =
+  "Search across posts and pages."
+const bundlePath = `/pagefind/${locale}/`
+---
+
+<div
+  class={`search-shell w-full ${className}`}
+  role="search"
+  aria-label={label}
+>
+  <div id={id} class="pagefind-ui pagefind-init w-full" data-locale={locale}>
+    <p
+      class="rounded-lg bg-background/70 p-6 text-sm text-muted-foreground shadow-sm backdrop-blur-md"
+    >
+      {hint}
+    </p>
+  </div>
+</div>
+<link href={`/pagefind/${locale}/pagefind-ui.css`} rel="stylesheet" />
+<script is:inline define:vars={{ id, lang: locale, bundlePath }}>
+  ;(() => {
+    window.__pagefindSearchCleanup?.()
+
+    const initPagefindSearch = async () => {
+      const target = document.querySelector(`#${id}`)
+      if (!target) return
+      if (target.dataset.pagefindStatus === "loading") return
+
+      const activeSearch = window.__pagefindSearch
+      if (
+        activeSearch?.instance &&
+        (activeSearch.locale !== lang || activeSearch.id !== id)
+      ) {
+        activeSearch.instance.destroy?.()
+        window.__pagefindSearch = undefined
+      }
+
+      if (
+        target.dataset.pagefindLocale === lang &&
+        target.querySelector(".pagefind-ui__search-input")
+      ) {
+        target.dataset.pagefindStatus = "ready"
+        return
+      }
+
+      target.dataset.pagefindStatus = "loading"
+      target.dataset.pagefindLocale = lang
+      const fallback = target.innerHTML
+
+      try {
+        await import(`${bundlePath}pagefind-ui.js`)
+        target.innerHTML = ""
+        const PagefindUI = window.PagefindUI
+        if (!PagefindUI) throw new Error("Pagefind UI failed to load.")
+        const instance = new PagefindUI({
+          element: `#${id}`,
+          bundlePath,
+          showImages: false,
+          showSubResults: true,
+        })
+        window.__pagefindSearch = { id, instance, locale: lang }
+
+        window.requestAnimationFrame(() => {
+          if (target.querySelector(".pagefind-ui__search-input")) {
+            target.dataset.pagefindStatus = "ready"
+            return
+          }
+          target.innerHTML = fallback
+          target.dataset.pagefindStatus = "fallback"
+          window.__pagefindSearch = undefined
+        })
+      } catch {
+        target.innerHTML = fallback
+        target.dataset.pagefindStatus = "fallback"
+        target.dataset.pagefindLocale = ""
+        window.__pagefindSearch = undefined
+      }
+    }
+
+    const cleanup = () => {
+      window.__pagefindSearch?.instance?.destroy?.()
+      window.__pagefindSearch = undefined
+    }
+    const handleBeforeSwap = () => cleanup()
+    document.addEventListener("astro:page-load", initPagefindSearch)
+    document.addEventListener("astro:before-swap", handleBeforeSwap)
+    window.__pagefindSearchCleanup = () => {
+      document.removeEventListener("astro:page-load", initPagefindSearch)
+      document.removeEventListener("astro:before-swap", handleBeforeSwap)
+      cleanup()
+    }
+    initPagefindSearch()
+  })()
+</script>

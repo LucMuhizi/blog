@@ -1,0 +1,67 @@
+---
+import Layout from "@/layouts/main.astro"
+import ServiceCard from "@/components/cards/ServiceCard.astro"
+import Icon from "@/components/ui/Icon.astro"
+import { SITE_CONFIG } from "@/config/site"
+
+const services = SITE_CONFIG.services ?? []
+const title = "Engagements and frameworks"
+const description =
+  "Research, policy advisory, training, and consultancy — grounded in rigour and oriented toward structural equity."
+---
+
+<Layout
+  path="/services/"
+  title={title}
+  description={description}
+>
+  <section class="mx-auto w-full max-w-6xl px-5 py-12 sm:px-7 sm:py-20">
+    <header class="mb-12 flex flex-col gap-3">
+      <span class="section-rule" aria-hidden="true"></span>
+      <p class="eyebrow">Engagements</p>
+      <h1 class="article-title">{title}</h1>
+      <p class="max-w-2xl font-serif text-lg leading-8 opacity-85 sm:text-xl">
+        {description}
+      </p>
+      <div class="mt-2 flex flex-wrap items-center gap-3 text-sm">
+        <a class="btn-primary" href="/contact/">
+          <Icon name="mail" class="size-4" dataIcon="inline-start" />
+          <span>Start a conversation</span>
+        </a>
+        <a
+          class="inline-flex items-center gap-1 underline-offset-4 hover:underline"
+          href="/posts/"
+        >
+          <span>See recent work</span>
+          <Icon name="arrow-right" class="size-4" />
+        </a>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2">
+      {services.map((service, index) => (
+        <ServiceCard
+          title={service.title}
+          summary={service.summary}
+          href={service.href ?? "/contact/"}
+          detail={service.detail}
+          index={index}
+        />
+      ))}
+    </div>
+
+    <aside class="mt-16 rounded-md border border-current/20 p-6 sm:p-10">
+      <p class="eyebrow">How we work</p>
+      <h2 class="section-title mt-3">Where we engage</h2>
+      <ul class="mt-6 grid grid-cols-1 gap-3 font-serif text-base leading-7 sm:grid-cols-2">
+        <li>Governments and multilateral agencies</li>
+        <li>Philanthropic foundations and civil society</li>
+        <li>Research institutions and academic networks</li>
+        <li>Movements for justice and accountability</li>
+      </ul>
+      <p class="mt-6 font-serif text-base leading-7 opacity-85">
+        We do not engage with actors whose stated mission conflicts with structural equity.
+      </p>
+    </aside>
+  </section>
+</Layout>

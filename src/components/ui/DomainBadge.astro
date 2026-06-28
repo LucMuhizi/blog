@@ -1,0 +1,46 @@
+---
+type Domain = "amber" | "purple" | "teal" | "rose"
+
+interface Props {
+  domain: Domain
+  label?: string
+  size?: "sm" | "md"
+  href?: string
+  class?: string
+}
+
+const { domain, label, size = "sm", href, class: className = "" } = Astro.props
+
+const dotClass = `accent-dot accent-dot--${domain}`
+const pillSizeClass = size === "md" ? "text-[0.75rem] px-3 py-1" : ""
+
+const WrapperTag = href ? "a" : "span"
+
+const wrapperAttrs = href
+  ? {
+      href,
+      class: ["accent-pill", `${dotClass}-surface`, pillSizeClass, className]
+        .filter(Boolean)
+        .join(" "),
+    }
+  : {
+      class: ["accent-pill", pillSizeClass, className].filter(Boolean).join(" "),
+    }
+---
+
+<WrapperTag {...wrapperAttrs}>
+  <span class={dotClass} aria-hidden="true"></span>
+  {label ? <span>{label}</span> : null}
+  <slot />
+</WrapperTag>
+
+<style>
+  /* Each domain variant colours the pill border + faint background tint. */
+  .accent-pill {
+    --accent-dot-c: var(--accent-amber);
+  }
+  .accent-pill:has(.accent-dot--amber) { --accent-dot-c: var(--accent-amber); }
+  .accent-pill:has(.accent-dot--purple) { --accent-dot-c: var(--accent-purple); }
+  .accent-pill:has(.accent-dot--teal) { --accent-dot-c: var(--accent-teal); }
+  .accent-pill:has(.accent-dot--rose) { --accent-dot-c: var(--accent-rose); }
+</style>
